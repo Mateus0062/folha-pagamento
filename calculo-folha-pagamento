@@ -1,0 +1,216 @@
+import java.text.ParseException;
+import java.util.Date;
+import  java.text.SimpleDateFormat;
+import java.util.Scanner;
+public class exercicio {
+    public static void main(String[] args) throws ParseException {
+        Scanner teclado = new Scanner(System.in);
+
+        double iniciotrabalho = 0, finaltrabalho = 0, diastrabalhados = 0, horasdescanso = 0, horastrabalho = 0,
+                horastrabalhadas = 0, jornadasemanal = 0, jornadamensal = 0, salarioporhora = 0, valorpensao = 0,
+                salario = 0, quantidadedependentes = 0, deducaopordependente = 0, valoroutrasdeducoes = 0,
+                totaldeducoes = 0, descontoinss = 0, adicionaispericulosidade = 0, salariominimo = 0,
+                baixosalario = 0, novosalario = 0, mediosalario = 0, altosalario = 0, valetransporte = 0,
+                maiorq6 = 0, menorq6 = 0, diastrabalhadosnomes = 0, valealimentacao = 0, FGTS = 0,
+                inss = 0, aliquotaefetivaINSS = 0, basedecalculo = 0, tabelaincidencia = 0, descontoIRRF = 0,
+                aliquotaefetivaIRRF = 0, salarioliquido = 0, valoradescontar = 0;
+
+        String dependentes = "", outrasd = "", pensaoalimenticia = "", periculosidade = "", insalubridade = "", nivel = "",
+                nome = "", dataad = "", cargo = "";
+
+        // RF1 - Salário Hora
+
+        System.out.println("Digite o seu nome completo: ");
+        nome = teclado.nextLine();
+
+        System.out.println("Digite a data em que você foi admitido: ");
+        dataad = teclado.nextLine();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = formatter.parse(dataad);
+
+        System.out.println("Digite o seu cargo: ");
+        cargo = teclado.nextLine();
+
+      System.out.println("Digite o valor do seu salário bruto: ");
+        salario = teclado.nextDouble();
+
+        System.out.println("Qual horário você inicia o trabalho?  ");
+        iniciotrabalho = teclado.nextDouble();
+
+        System.out.println("Qual o horário que você termina o trabalho? ");
+        finaltrabalho = teclado.nextDouble();
+
+        System.out.println("Digite quantos dias na semana você trabalhou: ");
+        diastrabalhados = teclado.nextDouble();
+
+        System.out.println("Digite quantas horas você teve de descanso: ");
+        horasdescanso = teclado.nextDouble();
+
+        horastrabalho = finaltrabalho - iniciotrabalho;
+        horastrabalhadas = horastrabalho - horasdescanso;
+        jornadasemanal = horastrabalhadas * diastrabalhados;
+        jornadamensal = jornadasemanal * 5;
+        salarioporhora = salario / jornadamensal;
+
+        // RF2 - Calcular periculosidade
+
+        System.out.println("Você recebe acréscimos de periculosidade? [Sim ou Não] ");
+        periculosidade = teclado.next().toLowerCase();
+        if (periculosidade.equals("sim")) {
+            adicionaispericulosidade = (salario * 0.03);
+        } else adicionaispericulosidade = 0;
+        //RF 3 - Calcular Insalubridade
+
+        System.out.println("Você recebe algum acréscimo de insalubridade? [sim ou não] ");
+        insalubridade = teclado.next();
+
+        salariominimo = 1380.60;
+        if (insalubridade.equals("sim")) {
+            System.out.println("qual é nível? (baixo, médio, alto) ");
+            nivel = teclado.next().toLowerCase();
+
+            if (nivel.equals("baixo")) {
+                baixosalario = salariominimo * 0.1;
+                novosalario = baixosalario;
+            }
+
+            if (nivel.equals("médio")) {
+                mediosalario = salariominimo * 0.2;
+                novosalario = mediosalario;
+            }
+
+            if (nivel.equals("alto")) {
+                altosalario = salariominimo * 0.4;
+                novosalario = altosalario;
+            }
+        } else {
+
+        }
+
+        //RF4 Cálculo vale transporte
+
+        System.out.println("Digite o valor do vale transporte: ");
+        valetransporte = teclado.nextFloat();
+
+        menorq6 = salario * 0.06;
+        maiorq6 = salario * 0.06;
+
+        if (valetransporte <= menorq6) {
+            valoradescontar = valetransporte;
+        } else if (valetransporte >= maiorq6) {
+                valoradescontar = maiorq6;
+        }
+
+        //RF 5 - Vale Alimentação
+
+        System.out.println("Digite a quantidade de dias trabalhados no mês: ");
+        diastrabalhadosnomes = teclado.nextDouble();
+
+        valealimentacao = 24 * diastrabalhadosnomes;
+
+        //RF 6 - Desconto INSS
+
+        if (salario <= 1302.00) {
+            descontoinss = salario * 0.075;
+            aliquotaefetivaINSS = (descontoinss / salario) * 100;
+        }
+        if (salario > 1302.01 && salario <= 2571.29) {
+            inss = (salario - 1302.01) * 0.09;
+            descontoinss = inss + 97.65;
+            aliquotaefetivaINSS = (descontoinss / salario) * 100;
+        }
+        if (salario > 2571.30 && salario <= 3856.94) {
+            inss = (salario - 2571.30) * 0.12;
+            descontoinss = inss + 97.65 + 114.23;
+            aliquotaefetivaINSS = (descontoinss / salario) * 100;
+        }
+        if (salario > 3856.95 && salario <= 7507.49) {
+            inss = (salario - 3856.95) * 0.14;
+            descontoinss = inss + 97.65 + 114.23 + 154.28;
+            aliquotaefetivaINSS = (descontoinss / salario) * 100;
+        }
+        if (salario >= 7507.50) {
+            descontoinss = 877.24;
+            aliquotaefetivaINSS = (descontoinss / salario) * 100;
+        }
+        // RF7 - Desconto FGTS
+
+        FGTS = salario * 0.08;
+
+        // RF 8 - Calcular Desconto IRRF
+
+        System.out.println("Você tem dependentes? (reponda com Sim ou Não) ");
+        dependentes = teclado.next().toLowerCase();
+
+        if (dependentes.equals("sim")) {
+            System.out.println("Quantos dependentes tem? ");
+            quantidadedependentes = teclado.nextDouble();
+            deducaopordependente = quantidadedependentes * 189.59;
+        } else {
+            System.out.println("ok");
+        }
+
+        System.out.println("Você tem outras deduções? (responda com Sim ou Não) ");
+        outrasd = teclado.next().toLowerCase();
+
+        if (outrasd.equals("sim")) {
+            System.out.println("Digite o valor delas: ");
+            valoroutrasdeducoes = teclado.nextDouble();
+        } else {
+            System.out.print("ok");
+        }
+
+        System.out.println("Você paga pensões alimentícias? (responda com Sim ou Não) ");
+        pensaoalimenticia = teclado.next().toLowerCase();
+
+        if (pensaoalimenticia.equals("sim")) {
+            System.out.println("Digite o valor da pensão alimentícia: ");
+            valorpensao = teclado.nextDouble();
+        } else {
+            System.out.println("ok");
+        }
+
+        totaldeducoes = descontoinss + deducaopordependente + valoroutrasdeducoes + valorpensao;
+        basedecalculo = salario - totaldeducoes;
+        if (basedecalculo <= 1903.98) {
+
+        } else if (basedecalculo > 1903.99 && basedecalculo <= 2826.65) {
+            tabelaincidencia = basedecalculo * 0.075;
+            descontoIRRF = tabelaincidencia - 142.80;
+            aliquotaefetivaIRRF = (descontoIRRF / salario) * 100;
+
+        } else if (basedecalculo > 2826.66 && basedecalculo <= 3751.05) {
+            tabelaincidencia = basedecalculo * 0.15;
+            descontoIRRF = tabelaincidencia - 354.80;
+            aliquotaefetivaIRRF = (descontoIRRF / salario) * 100;
+
+        } else if (basedecalculo > 3751.06 && basedecalculo <= 4664.68) {
+            tabelaincidencia = basedecalculo * 0.225;
+            descontoIRRF = tabelaincidencia - 636.13;
+            aliquotaefetivaIRRF = (descontoIRRF / salario) * 100;
+
+        } else if (basedecalculo >= 4664.68) {
+            tabelaincidencia = basedecalculo * 0.275;
+            descontoIRRF = tabelaincidencia - 869.36;
+            aliquotaefetivaIRRF = (descontoIRRF / salario) * 100;
+
+        salarioliquido = salario + adicionaispericulosidade + novosalario  - valoradescontar - descontoinss- descontoIRRF;
+
+        }
+        System.out.println("O seu nome é: " + nome);
+        System.out.println("Você foi admitido em " + dataad);
+        System.out.println("O seu cargo é " +cargo);
+        System.out.println("O seu salário líquido é " + salarioliquido);
+        System.out.println("Você recebe R$" +adicionaispericulosidade+ " de periculosidade");
+        System.out.println("Você recebe R$" +insalubridade+ " de insalubridade");
+        System.out.println("Você recebe R$" +valealimentacao+ " de vale alimentação");
+        System.out.println("Você tem um desconto de R$" +valetransporte+ " do vale transporte");
+        System.out.println("Você tem um desconto de R$" +descontoinss+ " do INSS");
+        System.out.println("Você tem um desconto de R$" +descontoIRRF+ " do IRRF");
+        System.out.println("Você tem a recolher R$" +FGTS+ " de FGTS");
+        System.out.println("O seu salário bruto é R$" +salario);
+        System.out.println("O seu salário por hora é de " +salarioporhora);
+
+
+    }
+}
